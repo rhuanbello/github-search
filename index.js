@@ -161,5 +161,7 @@ const resetContainers = () => {
   profileContainer.innerHTML = '';
 }
 
+getUserData('rhuanbello')
+
 searchButton.addEventListener('click', () => validateInput(searchInput.value));
 window.addEventListener('keypress', e => e.code === 'Enter' && validateInput(searchInput.value))
