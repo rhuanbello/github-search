@@ -59,7 +59,7 @@ const handleUserGitHubData = ({
     b.stargazers_count - a.stargazers_count
   ))
 
-  renderRepositories(sortedReposByStars);
+  renderRepositories(sortedReposByStars, filteredUserData.name);
   renderProfileData(filteredUserData);
 }
 
@@ -78,7 +78,7 @@ const handleReduceText = (text, maxLength) => {
   return substringedText;
 }
 
-const renderRepositories = (repository) => {
+const renderRepositories = (repository, username) => {
 
   repository.forEach(project => {
     const { stargazers_count, homepage, name, description, language } = project;
@@ -89,13 +89,13 @@ const renderRepositories = (repository) => {
             <p>${handleFormatName(name)}</p>
           </div>
           <div class="repository-info">
-            <span>${language}</span>
+            ${language ? `<span>${language}</span>` : ''}
             <div>
               <i class="ri-star-line"></i>
-              <span>${stargazers_count}</span>
+              <span>${stargazers_count || 0}</span>
             </div>
           </div>
-          <p>${handleReduceText(description, 60) || `${name} desenvolvido por Rhuan Bello`}</p>
+          <p>${handleReduceText(description, 60) || `${name} desenvolvido por ${username}`}</p>
           ${homepage ? `<a class="repository-action" href="${homepage}" target="_blank">Acessar</a>` : ''}
         </li>
     `;
@@ -115,17 +115,19 @@ const renderProfileData = ({
 }) => {
 
   profileContainer.innerHTML += `
-      <div class="profile-container">
+    <div class="profile-container">
       <img src="${avatar_url}" alt="">
       <div class="profile-info">
         <h3>${name}</h3>
         <span>@${login}</span>
-        <p>${bio}</p>
+        ${bio ? `<p>${bio}</p>` : ''}
         <div class="profile-extra-info">
-          <div>
-            <i class="ri-map-pin-line"></i>
-            <span>${location}</span>
-          </div>
+          ${location ? `
+            <div>
+              <i class="ri-map-pin-line"></i> 
+              <span>${location}</span>
+            </div>
+          ` : ''}
           <div>
             <i class="ri-calendar-event-line"></i>
             <span>Ingressou em ${new Date(created_at).toLocaleDateString('pt-BR', {
